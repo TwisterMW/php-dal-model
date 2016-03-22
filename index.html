@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test PHP DBModel</title>
+	<style>
+		html{border-top:5px solid #000;border-bottom:5px solid #000;}
+		body{padding:0 40px 20px 40px;font-family:"Calibri", mono, monospace;font-size:16px;}
+
+		header{text-align:right;margin-bottom:20px;font-size:14px;color:#666;}
+
+		a{color:#00ABD6;}
+
+		h1{border-bottom:1px solid #CCC;margin-bottom:40px;}
+		h2{background:#8EC63F;padding:10px;color:#FEFEFE;}
+		h3{text-decoration:underline;}
+		
+		hr{border:none;border-bottom:1px solid #CCC;margin:40px 0;}
+		
+		pre{margin:10px 0;padding:20px;background:#EFEFEF;}
+	
+		footer{margin-top:40px;border-top:1px solid #CCC;text-align:center;font-style:italic;padding:20px 0 0 0;}
+	</style>
+</head>
+<body>
+	<header>
+		Coded by <strong>Marc Hernández</strong> <a href="#">marc.hernandez@twiscript.com</a>
+	</header>
+	<h1>PHP DAL Model <small>(database-access-layer)</small></h1>
+	<h2>CRUD Definition</h2>
+	<h3>CREATE STATEMENT</h3>
+	<small>create($targetTable, $targetFields, $targetValues)</small>
+	<pre>
+print_r(
+	$db->create(
+		"test-table",
+		array("field1", "field2", "field3"),
+		array("value1", "value2", "value3")
+	)
+);
+	</pre>
+	<strong>It will output: </strong>
+	<i>INSERT INTO test-table (field1, field2, field3) VALUES ('value1', 'value2', 'value3')</i>
+	<br /><br /><h3>READ STATEMENT</h3>
+	<small>read($targetTable, $targetFields, $conditionTargetField = null, $conditionTargetValue = null)</small>
+	<pre>
+print_r(
+	$db->read(
+		"test-table",
+		array("field1", "field2"),
+		array("fieldToCompare1", "fieldToCompare2", "fieldToCompare3"),
+		array("valueToCompare1", "valueToCompare2", "valueToCompare3")
+	)
+);
+	</pre>
+	<strong>It will output: </strong>
+	<i>SELECT field1, field2 FROM test-table WHERE fieldToCompare1='valueToCompare1' AND fieldToCompare2='valueToCompare2' AND fieldToCompare3='valueToCompare3'</i>
+	<br /><br /><h3>UPDATE STATEMENT</h3>
+	<small>update($targetTable, $targetFields, $targetValues, $conditionTargetField = null, $conditionTargetValue = null)</small>
+	<pre>
+print_r(
+	$db->update(
+		"test-table",
+		array("fieldToUpdate1", "fieldToUpdate2", "fieldToUpdate3"),
+		array("valueToUpdate1", "valueToUpdate2", "valueToUpdate3"),
+		array("fieldToCompare1", "fieldToCompare2", "fieldToCompare3"),
+		array("valueToCompare1", "valueToCompare2", "valueToCompare3")
+	)
+);
+	</pre>
+	<strong>It will output: </strong>
+	<i>UPDATE test-table SET fieldToUpdate1='valueToUpdate1', fieldToUpdate2='valueToUpdate2', fieldToUpdate3='valueToUpdate3' WHERE fieldToCompare1='valueToCompare1' AND fieldToCompare2='valueToCompare2' AND fieldToCompare3='valueToCompare3'</i>
+	<br /><br /><h3>DELETE STATEMENT</h3>
+	<small>delete($targetTable, $conditionTargetField = null, $conditionTargetValue = null)</small>
+	<pre>
+print_r(
+	$db->delete(
+		"test-table",
+		array("fieldToCompare1", "fieldToCompare2", "fieldToCompare3"),
+		array("valueToCompare1", "valueToCompare2", "valueToCompare3")
+	)
+);
+	</pre>
+	<strong>It will output: </strong>
+	<i>DELETE FROM test-table WHERE fieldToCompare1='valueToCompare1' AND fieldToCompare2='valueToCompare2' AND fieldToCompare3='valueToCompare3'</i>
+	<hr /><h2>DAL Usage</h2>
+	<h3>Initializing / Basic configuration</h3>
+	You need to update the constant values at <i>db-constants.php</i> file with your database right values
+	<pre>
+define("DB_SERVER", "");
+define("DB_USER", "");
+define("DB_PASS", "");
+define("DB_NAME", "");
+	</pre>
+	The database-access-layer.php and db-constants.php files must be at same location.
+	<h3>Including / Instantiating</h3>
+	<pre>
+include_once("database-access-layer.php");
+$db = new DAL();
+	</pre>
+	<h3>Creating and executing queries</h3>
+	<pre>
+$q = $db->create(
+	"test-table",
+	array("field1", "field2", "field3"),
+	array("value1", "value2", "value3")
+);
+
+$db->execute($q);
+	</pre>
+	Or you can directly execute a query like that:
+	<pre>
+$db->execute(
+	$db->create(
+		"test-table",
+		array("field1", "field2", "field3"),
+		array("value1", "value2", "value3")
+	)
+);
+	</pre>
+	<footer>
+		Coded by <strong>Marc Hernández</strong>
+	</footer>
+</body>
+</html>
